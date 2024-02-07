@@ -6,59 +6,103 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import kiss_bear from "../public/bear-kiss-bear-kisses.gif";
 import happy_bear from "../public/bear-happy.gif";
+import { saveToDb } from "./utils";
 
 const Page = () => {
   const [scale, setScale] = useState(1.0);
   const [reqIndex, setReqIndex] = useState(0);
   const [view, setView] = useState(false);
+  const [modalOpen, setModalOpen] = useState(true);
+  const [value, setValue] = useState("");
+
   const handleIncrease = () => {
     setReqIndex(reqIndex + 1);
     setScale(scale * 1.1);
   };
   const handleShow = () => {
     setView(true);
+    saveToDb(value);
   };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
+  };
+
+  const handleSubmitClick = () => {
+    if (value.length > 0) {
+      setModalOpen(false);
+    }
+  };
+
   return (
-    <main className="flex items-center justify-center h-screen flex-col w-full">
-      {view && (
-        <>
-          <Image src={kiss_bear} alt="bear-kiss" height={400} width={400} />
-        </>
-      )}
-      {!view && (
-        <div className="flex items-center justify-center flex-col">
-          <Image
-            src={happy_bear}
-            alt="bear-kiss"
-            height={200}
-            width={200}
-            className=""
+    <>
+      <div
+        className={`${
+          modalOpen ? "" : "hidden"
+        } absolute z-10 flex justify-center items-center w-full h-screen`}
+      >
+        <div className="p-20 bg-white rounded-xl shadow-lg flex justify-center items-center flex-col gap-3">
+          <input
+            placeholder="Enter Your Name"
+            onChange={handleChange}
+            value={value}
+            className="border-2 border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:border-blue-500 shadow-md hover:shadow-lg transition duration-300 ease-in-out"
           />
-          <motion.span
-            animate={{ scale: 1.0 + scale * 0.3 }}
-            className="text-center w-full"
+          <button
+            onClick={handleSubmitClick}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md hover:shadow-lg transition duration-300 ease-in-out"
           >
-            Will You Be My Valentine?
-          </motion.span>
-          <div className="flex flex-row items-center">
-            <Button
-              text="Yes"
-              color="green"
-              scale={scale}
-              onClick={handleShow}
-              className="bg-green-500 hover:bg-green-700"
-            />
-            <Button
-              text={requestArr[reqIndex]}
-              color="red"
-              scale={1.0}
-              onClick={handleIncrease}
-              className="bg-red-500 hover:bg-red-700"
-            />
-          </div>
+            Submit
+          </button>
         </div>
-      )}
-    </main>
+      </div>
+      <main
+        className={`flex items-center justify-center h-screen flex-col w-full ${
+          modalOpen ? "blur bg-slate-200" : ""
+        }`}
+      >
+        {view && (
+          <>
+            <Image src={kiss_bear} alt="bear-kiss" height={400} width={400} />
+            <span className="font-semibold">
+              Thank you for accepting my request! I will cherish you forever!
+            </span>
+          </>
+        )}
+        {!view && (
+          <div className="flex items-center justify-center flex-col">
+            <Image
+              src={happy_bear}
+              alt="bear-kiss"
+              height={200}
+              width={200}
+              className=""
+            />
+            <motion.span
+              animate={{ scale: 1.0 + scale * 0.3 }}
+              className="text-center w-full"
+            >
+              Will You Be My Valentine?
+            </motion.span>
+            <div className="flex flex-row items-center">
+              <Button
+                text="Yes"
+                color="green"
+                scale={scale}
+                onClick={handleShow}
+                className="bg-green-500 hover:bg-green-700"
+              />
+              <Button
+                text={requestArr[reqIndex]}
+                color="red"
+                scale={1.0}
+                onClick={handleIncrease}
+                className="bg-red-500 hover:bg-red-700"
+              />
+            </div>
+          </div>
+        )}
+      </main>
+    </>
   );
 };
 
