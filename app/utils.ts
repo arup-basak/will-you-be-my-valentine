@@ -9,13 +9,14 @@ mongoose
 
 const schema = new mongoose.Schema({
   name: String,
+  count: String,
 });
 
-const model = mongoose.model("ValentimeName", schema);
+const model = mongoose.model("ValentineName", schema);
 
-export const saveToDb = async (newName: string) => {
+export const saveToDb = async (newName: string, count: number) => {
   try {
-    const op = await model.create({ name: newName });
+    const op = await model.create({ name: newName, count: String(count) });
     console.log(op);
   } catch (error) {
     console.error("Error saving to db:", error);

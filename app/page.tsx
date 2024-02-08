@@ -21,7 +21,7 @@ const Page = () => {
   };
   const handleShow = () => {
     setView(true);
-    saveToDb(value);
+    saveToDb(value, reqIndex);
   };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
