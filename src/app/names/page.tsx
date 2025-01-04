@@ -14,7 +14,7 @@ const columns: Column<IUser>[] = [
 const PasswordProtectedPage = ({ data }: { data: IUser[] }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
-  const correctPassword = process.env.NEXT_PUBLIC_PASSWORD;
+  const correctPassword = process.env.NEXT_PUBLIC_SECURE_PASSWORD;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
